@@ -25,15 +25,14 @@ Dependencies:
 Usage:
 ------
 
-Clone this repository
+Clone this repository:
  git clone https://github.com/pypingou/kittybenchmark.git
 
 Have the dependencies installed or make a symbolic link to the
-kittystore module.
+kittystore module:
  ln -s ../kittystore/kittystore .
 
-Adjust the tests.py file.
-
+Adjust the tests.py file:
  At the top of the file, adjust the lines 12 (URL) and 14 (MG_STORE),
  replace the dummy information with the real information needed to
  connect to the databases.
