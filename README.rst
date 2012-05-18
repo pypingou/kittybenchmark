@@ -5,6 +5,7 @@ KittyBenchmark
 
 
 Scripts used to run a benchmark using kittystore against the backends:
+
 - postgresql (8.4.9-1.el6_1.1.x86_64)
 - mongodb (1.8.2-2.el6.x86_64)
 
@@ -32,9 +33,10 @@ kittystore module.
  ln -s ../kittystore/kittystore .
 
 Adjust the tests.py file.
-At the top of the file, adjust the lines 12 (URL) and 14 (MG_STORE),
-replace the dummy information with the real information needed to
-connect to the databases.
+
+ At the top of the file, adjust the lines 12 (URL) and 14 (MG_STORE),
+ replace the dummy information with the real information needed to
+ connect to the databases.
 
 
 License
