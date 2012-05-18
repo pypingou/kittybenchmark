@@ -28,8 +28,7 @@ Usage:
 Clone this repository:
  git clone https://github.com/pypingou/kittybenchmark.git
 
-Have the dependencies installed or make a symbolic link to the
-kittystore module:
+Have the dependencies installed or make a symbolic link to the kittystore module:
  ln -s ../kittystore/kittystore .
 
 Adjust the tests.py file:
