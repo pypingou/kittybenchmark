@@ -18,7 +18,7 @@ Source:  https://github.com/pypingou/kittybenchmark
 Dependencies:
 -------------
 
-.. _R: http://r-project.org)
+.. _R: http://r-project.org
 - kittystore
 - SQLAlchemy 
 - pymongo for mongodb
