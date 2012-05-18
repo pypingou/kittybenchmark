@@ -25,7 +25,7 @@ Dependencies:
 Usage:
 ------
 
-Clone this repository:
+Clone this repository
  git clone https://github.com/pypingou/kittybenchmark.git
 
 Have the dependencies installed or make a symbolic link to the
