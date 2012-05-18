@@ -17,9 +17,12 @@ Source:  https://github.com/pypingou/kittybenchmark
 
 Dependencies:
 -------------
+
+.. _R: http://r-project.org)
 - kittystore
 - SQLAlchemy 
 - pymongo for mongodb
+- `R`_
 
 
 Usage:
@@ -36,6 +39,11 @@ Adjust the tests.py file:
  replace the dummy information with the real information needed to
  connect to the databases.
 
+Run the script:
+ python tests.py
+
+Generate the visualisation:
+ R < visualisation.R
 
 License
 -------
