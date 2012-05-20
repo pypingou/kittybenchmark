@@ -8,7 +8,7 @@ from kittystore.mongostore import KittyMGStore
 # Define global constant
 
 TABLE = 'devel'
-REP = 1
+REP = 30
 URL = 'postgres://mm3:mm3@localhost/mm3'
 DB_STORE = KittySAStore(URL)
 MG_STORE = KittyMGStore(host='localhost', port=27017)
@@ -18,9 +18,24 @@ END = datetime.datetime(2012, 3, 30)
 
 def output(name, post, mongo):
     stream = open(name, 'w')
-    stream.write('postgresql\tMongodb')
+    stream.write('MG\tPG\n')
     for i in range(0, len(post)):
-        stream.write(str(post[i]) + '\t' + str(mongo[i]))
+        stream.write('%s\t%s\n' % (mongo[i], post[i]))
+    stream.close()
+
+def output_2(name, mongo, mongo_cs, post, post_cs):
+    stream = open(name, 'w')
+    stream.write('MG\tMG-CS\tPG\tPG-CS\n')
+    for i in range(0, len(post)):
+        stream.write('%s\t%s\t%s\t%s\n' %(mongo[i], mongo_cs[i],
+            post[i], post_cs[i]))
+    stream.close()
+
+def output_4(name, mongo, post, post_or):
+    stream = open(name, 'w')
+    stream.write('MG\tPG\tPG-OR\n')
+    for i in range(0, len(post)):
+        stream.write('%s\t%s\t%s\n' %(mongo[i], post[i], post_or[i]))
     stream.close()
 
 def get_email(rep):
@@ -53,7 +68,7 @@ def get_archives_range(rep):
         t0 = time.time()
         res_mg = len(MG_STORE.get_archives(TABLE, START, END))
         mongo.append(time.time() - t0)
-    output('get_thread_length', post, mongo)
+    output('get_archives_range', post, mongo)
     if res_mg != res_pg:
         print '** Results differs'
         print 'MG: %s' % res_mg
@@ -153,6 +168,24 @@ def search_subject(rep):
         print 'MG: %s' % res_mg
         print 'PG: %s\n' % res_pg
 
+def search_subject_cs(rep):
+    print 'search_subject_cs'
+    post_cs = []
+    mongo_cs = []
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_cs = len(DB_STORE.search_subject_cs(TABLE, 'rawhid'))
+        post_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_mg_cs = len(MG_STORE.search_subject_cs(TABLE, 'rawhid'))
+        mongo_cs.append(time.time() - t0)
+    output('search_subject_cs', post_cs, mongo_cs)
+    if res_mg_cs != res_pg_cs:
+        print '** Results differs'
+        print 'MG-CS: %s' % res_mg_cs
+        print 'PG-CS: %s\n' % res_pg_cs
+
 def search_content(rep):
     print 'search_content'
     post = []
@@ -171,9 +204,28 @@ def search_content(rep):
         print 'MG: %s' % res_mg
         print 'PG: %s\n' % res_pg
 
+def search_content_cs(rep):
+    print 'search_content_cs'
+    post_cs = []
+    mongo_cs = []
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_cs = len(DB_STORE.search_content_cs(TABLE, 'rawhid'))
+        post_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_mg_cs = len(MG_STORE.search_content_cs(TABLE, 'rawhid'))
+        mongo_cs.append(time.time() - t0)
+    output('search_content_cs', post_cs, mongo_cs)
+    if res_mg_cs != res_pg_cs:
+        print '** Results differs'
+        print 'MG-CS: %s' % res_mg_cs
+        print 'PG-CS: %s\n' % res_pg_cs
+
 def search_content_subject(rep):
     print 'search_content_subject'
     post = []
+    post_or = []
     mongo = []
     for i in range(0, rep):
         t0 = time.time()
@@ -181,31 +233,90 @@ def search_content_subject(rep):
         post.append(time.time() - t0)
     for i in range(0, rep):
         t0 = time.time()
+        res_pg_or = len( DB_STORE.search_content_subject_or(TABLE, 'rawhid'))
+        post_or.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
         res_mg = len( MG_STORE.search_content_subject(TABLE, 'rawhid'))
         mongo.append(time.time() - t0)
-    output('search_content_subject', post, mongo)
-    if res_mg != res_pg:
+    output_4('search_content_subject', mongo, post, post_or)
+    if res_mg != res_pg or res_mg != res_pg_or:
         print '** Results differs'
         print 'MG: %s' % res_mg
-        print 'PG: %s\n' % res_pg
+        print 'PG: %s' % res_pg
+        print 'PG-OR: %s\n' % res_pg_or
+
+def search_content_subject_cs(rep):
+    print 'search_content_subject_cs'
+    post_cs = []
+    post_or_cs = []
+    mongo_cs = []
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_cs = len( DB_STORE.search_content_subject_cs(TABLE, 'rawhid'))
+        post_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_or_cs = len( DB_STORE.search_content_subject_or_cs(TABLE, 'rawhid'))
+        post_or_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_mg_cs = len( MG_STORE.search_content_subject_cs(TABLE, 'rawhid'))
+        mongo_cs.append(time.time() - t0)
+    output_4('search_content_subject_cs', mongo_cs, post_cs, post_or_cs)
+    if res_mg_cs != res_pg_cs or res_mg_cs != res_pg_or_cs:
+        print '** Results differs'
+        print 'MG-CS: %s' % res_mg_cs
+        print 'PG-CS: %s' % res_pg_cs
+        print 'PG-OR-CS: %s\n' % res_pg_or_cs
 
 def search_sender(rep):
     print 'search_sender'
     post = []
+    post_or = []
     mongo = []
     for i in range(0, rep):
         t0 = time.time()
-        res_pg = len(DB_STORE.search_sender(TABLE, 'pingou'))
+        res_pg = len( DB_STORE.search_sender(TABLE, 'rawhid'))
         post.append(time.time() - t0)
     for i in range(0, rep):
         t0 = time.time()
-        res_mg = len(MG_STORE.search_sender(TABLE, 'pingou'))
+        res_pg_or = len( DB_STORE.search_sender_or(TABLE, 'rawhid'))
+        post_or.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_mg = len( MG_STORE.search_sender(TABLE, 'rawhid'))
         mongo.append(time.time() - t0)
-    output('search_sender', post, mongo)
-    if res_mg != res_pg:
+    output_4('search_sender', mongo, post, post_or)
+    if res_mg != res_pg or res_mg != res_pg_or:
         print '** Results differs'
         print 'MG: %s' % res_mg
-        print 'PG: %s\n' % res_pg
+        print 'PG: %s' % res_pg
+        print 'PG-OR: %s\n' % res_pg_or
+
+def search_sender_cs(rep):
+    print 'search_sender_cs'
+    post_cs = []
+    post_or_cs = []
+    mongo_cs = []
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_cs = len( DB_STORE.search_sender_cs(TABLE, 'rawhid'))
+        post_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_pg_or_cs = len( DB_STORE.search_sender_or_cs(TABLE, 'rawhid'))
+        post_or_cs.append(time.time() - t0)
+    for i in range(0, rep):
+        t0 = time.time()
+        res_mg_cs = len( MG_STORE.search_sender_cs(TABLE, 'rawhid'))
+        mongo_cs.append(time.time() - t0)
+    output_4('search_sender_cs', mongo_cs, post_cs, post_or_cs)
+    if res_mg_cs != res_pg_cs or res_mg_cs != res_pg_or_cs:
+        print '** Results differs'
+        print 'MG-CS: %s' % res_mg_cs
+        print 'PG-CS: %s' % res_pg_cs
+        print 'PG-OR-CS: %s\n' % res_pg_or_cs
 
 def get_list_size(rep):
     print 'get_list_size'
@@ -236,8 +347,13 @@ if __name__ == '__main__':
     get_archives_length(REP)
 
     search_subject(REP)
+    search_subject_cs(REP)
     search_content(REP)
+    search_content_cs(REP)
     search_content_subject(REP)
+    search_content_subject_cs(REP)
+    search_sender(REP)
+    search_sender_cs(REP)
     
     get_list_size(REP)
     print "Ran for %s seconds" % (time.time() - t_start)
