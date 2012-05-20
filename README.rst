@@ -19,10 +19,15 @@ Dependencies:
 -------------
 
 .. _R: http://r-project.org
-- kittystore
+- kittystore (Bundled in)
 - SQLAlchemy 
 - pymongo for mongodb
 - `R`_
+
+We now have a modified version of kittystore which contains more queries
+for PostgreSQL. Modified queries which will not be part of upstream's
+version (for example, using union or 'or' statement).
+Use the version bundled in, or you will have to adjust tests.py
 
 
 Usage:
@@ -30,9 +35,6 @@ Usage:
 
 Clone this repository:
  git clone https://github.com/pypingou/kittybenchmark.git
-
-Have the dependencies installed or make a symbolic link to the kittystore module:
- ln -s ../kittystore/kittystore .
 
 Adjust the tests.py file:
  At the top of the file, adjust the lines 12 (URL) and 14 (MG_STORE),
