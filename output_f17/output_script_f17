@@ -1,0 +1,42 @@
+$ python tests.py 
+get_email
+get_archives_range
+first_email_in_archives_range
+get_thread_length
+get_thread_participants
+get_archives_length
+search_subject
+search_subject_cs
+search_content
+search_content_cs
+search_content_subject
+** Results differs
+MG: 28773
+PG: 34121
+PG-OR: 28773
+
+search_content_subject_cs
+** Results differs
+MG-CS: 24897
+PG-CS: 28589
+PG-OR-CS: 24897
+
+search_sender
+** Results differs
+MG: 1889
+PG: 3334
+PG-OR: 1889
+
+search_sender_cs
+** Results differs
+MG-CS: 1888
+PG-CS: 1889
+PG-OR-CS: 1888
+
+get_list_size
+** Results differs
+MG: 166696
+PG: 166726
+
+Ran for 2461.920367 seconds
+
