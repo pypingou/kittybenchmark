@@ -274,7 +274,7 @@ class KittySAStore(KittyStore):
                 email.subject.ilike('%{0}%'.format(keyword))
                 )).order_by(email.date).all()
         mails.reverse()
-        return list(set(mails))
+        return mails
 
     def search_content_subject_or_cs(self, list_name, keyword):
         """ Returns a list of email containing the specified keyword in
@@ -292,7 +292,7 @@ class KittySAStore(KittyStore):
                 email.subject.like('%{0}%'.format(keyword))
                 )).order_by(email.date).all()
         mails.reverse()
-        return list(set(mails))
+        return mails
 
     def search_sender(self, list_name, keyword):
         """ Returns a list of email containing the specified keyword in
@@ -349,7 +349,7 @@ class KittySAStore(KittyStore):
                 email.email.ilike('%{0}%'.format(keyword))
                 )).order_by(email.date).all()
         mails.reverse()
-        return list(set(mails))
+        return mails
 
     def search_sender_or_cs(self, list_name, keyword):
         """ Returns a list of email containing the specified keyword in
@@ -366,7 +366,7 @@ class KittySAStore(KittyStore):
                 email.email.like('%{0}%'.format(keyword))
                 )).order_by(email.date).all()
         mails.reverse()
-        return list(set(mails))
+        return mails
 
     def search_subject(self, list_name, keyword):
         """ Returns a list of email containing the specified keyword in
